@@ -1,17 +1,29 @@
 package com.wang.springmvc.entity;
 
+import java.util.Date;
+
 public class Account {
 
     private String name;
     private Integer age;
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     private User user;
 
     @Override
-    public String  toString() {
+    public String toString() {
         return "Account{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", date=" + date +
                 ", user=" + user +
                 '}';
     }

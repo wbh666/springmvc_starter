@@ -19,6 +19,9 @@
     <form action="account" method="post">
         accountName:<input type="text" name="name"/>
         accountAge:<input type="text" name="age"/>
+        date:<%--<input type="text" name="date"/>--%>
+        <input type="date" name="date"/>
+
         userName:<input type="text" name="user.name"/>
         userAge:<input type="text" name="user.age"/>
         <input type="submit"/>

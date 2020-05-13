@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wang.mybatis.dao.UserDao">
+    <!--结果映射-->
+    <resultMap id="userMap" type="user">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="sex" property="sex"/>
+        <result column="address" property="address"/>
+        <result column="birthday" property="birthday"/>
+    </resultMap>
+
+    <!--查询所有用户-->
+    <sql id="findAll">
+        SELECT * FROM user
+    </sql>
+
+    <!--查询所有用户-->
+    <select id="findAll" resultType="user">
+        <include refid="findAll"/>
+    </select>
+
+
+
+    <!--新增单个用户-->
+    <insert id="addUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.wang.mybatis.domain.User">
+        <!--<selectKey order="AFTER" keyColumn="id" keyProperty="id" resultType="Integer">
+            SELECT last_insert_id();
+        </selectKey>-->
+        INSERT INTO user(username, birthday, sex, address) VALUES (#{username}, #{birthday}, #{sex}, #{address});
+    </insert>
+
+    <!--查询指定id的用户-->
+    <select id="findUserById" parameterType="Integer" resultType="com.wang.mybatis.domain.User">
+        SELECT * FROM user WHERE id = #{idddd};
+    </select>
+
+    <!--更新用户数据-->
+    <update id="updateUser" parameterType="com.wang.mybatis.domain.User">
+        UPDATE user SET username=#{username}, address=#{address}, sex=#{sex}, birthday=#{birthday}
+        WHERE id=#{id}
+    </update>
+
+    <!--删除指定id的用户-->
+    <delete id="deleteUserById" parameterType="Integer">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+
+    <!--按名字模糊搜索用户-->
+    <!--SELECT * FROM user WHERE username LIKE #{username}-->
+    <select id="findUsersByName" parameterType="String" resultMap="userMap">
+        SELECT * FROM user
+        <if test="username != null and username != ''">
+            WHERE username LIKE '%${username}%';
+        </if>
+
+    </select>
+
+    <!--聚合函数获取用户总记录条数-->
+    <select id="findUserTotalCounts" resultType="Integer">
+        SELECT count(*) FROM user;
+    </select>
+
+    <!--返回指定id范围内的用户记录-->
+    <select id="findUsersInIds" parameterType="com.wang.mybatis.domain.UserIdList" resultMap="userMap">
+        <include refid="findAll"/>
+        <where>
+            <if test="idList != null and idList != '' ">
+                <foreach collection="idList" open="id in (" close=")" separator="," item="uid">
+                    #{uid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>
